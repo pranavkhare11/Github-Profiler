@@ -1,10 +1,38 @@
+import { useState } from "react";
+import { useParams } from "react-router";
+import ProfileCard from "../features/profile/ProfileCard";
+import ProfileTabs from "../features/profile/ProfileTabs";
+import type { GitHubUserProfile } from "../types/github";
+
 const ProfilePage = () => {
-	return (
-		<section className="space-y-2">
-			<h2 className="text-2xl font-semibold">Profile</h2>
-			<p className="text-gray-600">Profile details will render here.</p>
-		</section>
-	);
+    const { username } = useParams<{ username: string }>();
+    const [profile, setProfile] = useState<GitHubUserProfile | null>(null);
+    const [isFetching, setIsFetching] = useState(false);
+
+    return (
+        <section className="panel content-panel">
+            <ProfileCard 
+                login={username || ""} 
+                onProfileLoaded={setProfile}
+                onFetching={setIsFetching}
+            />
+            
+            {!isFetching && profile && (
+                <ProfileTabs 
+                    login={profile.login} 
+                    publicRepos={profile.public_repos}
+                    publicGists={profile.public_gists}
+                />
+            )}
+
+            {!isFetching && (
+                <div className="glyph-band" style={{ marginTop: "24px" }}>
+                    <span className="glyph-dot" />
+                    <span>module.profile.pending</span>
+                </div>
+            )}
+        </section>
+    );
 };
 
 export default ProfilePage;

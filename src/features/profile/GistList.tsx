@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import api from "../../api/client";
 import { GITHUB_ENDPOINTS } from "../../constants/endpoints";
-import type { GitHubRepo } from "../../types/github";
+import type { GitHubGist } from "../../types/github";
 
-interface RepoListProps {
+interface GistListProps {
     login: string;
 }
 
-const RepoList = ({ login }: RepoListProps) => {
-    const [repos, setRepos] = useState<GitHubRepo[]>([]);
+const GistList = ({ login }: GistListProps) => {
+    const [gists, setGists] = useState<GitHubGist[]>([]);
     const [isFetching, setIsFetching] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
@@ -16,18 +16,18 @@ const RepoList = ({ login }: RepoListProps) => {
     useEffect(() => {
         const controller = new AbortController();
 
-        const fetchRepos = async () => {
+        const fetchGists = async () => {
             try {
                 setIsFetching(true);
-                const response = await api.get(GITHUB_ENDPOINTS.userRepos(login), {
+                const response = await api.get(GITHUB_ENDPOINTS.userGists(login), {
                     params: { per_page: 100 },
                     signal: controller.signal,
                 });
-                setRepos(response.data);
+                setGists(response.data);
             } catch (error: unknown) {
                 if (error instanceof Error && error.name !== "CanceledError") {
-                    console.error("Error fetching repositories:", error);
-                    setRepos([]);
+                    console.error("Error fetching gists:", error);
+                    setGists([]);
                 }
             } finally {
                 if (!controller.signal.aborted) {
@@ -37,7 +37,7 @@ const RepoList = ({ login }: RepoListProps) => {
         };
 
         if (login) {
-            fetchRepos();
+            fetchGists();
         }
 
         return () => {
@@ -53,40 +53,45 @@ const RepoList = ({ login }: RepoListProps) => {
         return (
             <div className="glyph-band">
                 <span className="glyph-dot" />
-                <span>Fetching repositories from Neural Spine...</span>
+                <span>Fetching gists from Neural Spine...</span>
             </div>
         );
     }
 
-    const totalPages = Math.ceil(repos.length / itemsPerPage);
-    const displayedRepos = repos.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const totalPages = Math.ceil(gists.length / itemsPerPage);
+    const displayedGists = gists.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     return (
-        <div className="repos-list-container">
-            {repos.length > 0 ? (
+        <div className="gists-list-container">
+            {gists.length > 0 ? (
                 <>
                     <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                        {displayedRepos.map((repo) => (
-                            <div key={repo.id} className="repo-card">
-                                <div className="repo-card-header">
-                                    <a
-                                        href={repo.html_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="repo-link"
-                                    >
-                                        {repo.name}
-                                    </a>
-                                    <span className="repo-dot-status" />
+                        {displayedGists.map((gist) => {
+                            const fileNames = Object.keys(gist.files);
+                            const displayTitle = gist.description || (fileNames.length > 0 ? fileNames[0] : "Unnamed Gist");
+                            return (
+                                <div key={gist.id} className="gist-card">
+                                    <div className="gist-card-header">
+                                        <a
+                                            href={gist.html_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="gist-link"
+                                        >
+                                            {displayTitle}
+                                        </a>
+                                        <span className="repo-dot-status" />
+                                    </div>
+                                    <div className="gist-meta-row">
+                                        {fileNames.map((fileName) => (
+                                            <span key={fileName} className="gist-file-tag">
+                                                {fileName}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
-                                {repo.description && <p className="repo-desc">{repo.description}</p>}
-                                <div className="repo-meta-row">
-                                    {repo.language && <span className="repo-lang-tag">{repo.language}</span>}
-                                    <span className="repo-stat-tag">★ {repo.stargazers_count}</span>
-                                    <span className="repo-stat-tag">⑂ {repo.forks_count}</span>
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     {totalPages > 1 && (
@@ -112,10 +117,10 @@ const RepoList = ({ login }: RepoListProps) => {
                     )}
                 </>
             ) : (
-                <div className="status-text">No public repositories found.</div>
+                <div className="status-text">No public gists found.</div>
             )}
         </div>
     );
 };
 
-export default RepoList;
+export default GistList;

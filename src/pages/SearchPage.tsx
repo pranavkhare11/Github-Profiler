@@ -1,8 +1,16 @@
+import SearchBar from "../features/search/SearchBar";
+
 const SearchPage = () => {
 	return (
-		<section className="space-y-2">
-			<h2 className="text-2xl font-semibold">Search GitHub users</h2>
-			<p className="text-gray-600">Use the search page to look up a profile.</p>
+		<section className="search-page">
+			<div className="search-header">
+				<div className="search-badge">SEARCH</div>
+				<h2 className="search-title">GitHub user lookup</h2>
+			</div>
+			<p className="search-subtitle">
+				Search any GitHub username and open the profile instantly with smart suggestions.
+			</p>
+			<SearchBar />
 		</section>
 	);
 };
