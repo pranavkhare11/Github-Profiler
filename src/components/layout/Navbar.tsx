@@ -1,5 +1,6 @@
 import { useLocation, Link } from "react-router";
-import SearchBar from "../../features/search/SearchBar";
+import SearchBar from "@pages/Search/components/SearchBar/SearchBar";
+import "./Navbar.css";
 
 const Navbar = () => {
   const location = useLocation();

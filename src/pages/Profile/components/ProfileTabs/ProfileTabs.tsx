@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router";
-import RepoList from "./RepoList";
-import GistList from "./GistList";
+import RepoList from "@pages/Profile/components/RepoList/RepoList";
+import GistList from "@pages/Profile/components/GistList/GistList";
+import "./ProfileTabs.css";
 
 interface ProfileTabsProps {
     login: string;

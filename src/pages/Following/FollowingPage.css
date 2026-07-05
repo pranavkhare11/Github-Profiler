@@ -1,0 +1,112 @@
+.following-header-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.pill-back-btn {
+    align-self: flex-start;
+    background: transparent;
+    border: 1px solid var(--line-2);
+    color: var(--grey-text);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pill-back-btn:hover {
+    color: var(--black-main);
+    border-color: var(--black-main);
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.following-list-container {
+    margin-top: 16px;
+}
+
+.following-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.following-card {
+    background: 
+        radial-gradient(var(--white-3) 1px, transparent 1px),
+        linear-gradient(170deg, var(--white-1), var(--white-2));
+    background-size: 12px 12px, 100% 100%;
+    border: 1px solid var(--line-2);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.following-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: var(--black-main);
+}
+
+.following-card-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.following-avatar-container {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px dashed var(--line-2);
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white-1);
+}
+
+.following-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.following-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.following-username {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--black-main);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.following-username:hover {
+    color: var(--accent-red);
+    text-decoration: underline;
+}
+
+.following-github-link {
+    font-size: 0.75rem;
+    color: var(--grey-text);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+}
+
+.following-github-link:hover {
+    color: var(--black-main);
+    text-decoration: underline;
+}

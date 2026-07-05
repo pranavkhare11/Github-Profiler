@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams } from "react-router";
-import ProfileCard from "../features/profile/ProfileCard";
-import ProfileTabs from "../features/profile/ProfileTabs";
-import type { GitHubUserProfile } from "../types/github";
+import ProfileCard from "@pages/Profile/components/ProfileCard/ProfileCard";
+import ProfileTabs from "@pages/Profile/components/ProfileTabs/ProfileTabs";
+import type { GitHubUserProfile } from "@app-types/github";
 
 const ProfilePage = () => {
     const { username } = useParams<{ username: string }>();

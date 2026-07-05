@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { userProfile } from "../../api/github";
-import type { GitHubUserProfile } from "../../types/github";
+import { useProfileCard } from "./useProfileCard";
+import type { GitHubUserProfile } from "@app-types/github";
+import "./ProfileCard.css";
 
 interface ProfileCardProps {
     login: string;
@@ -10,60 +9,11 @@ interface ProfileCardProps {
 }
 
 const ProfileCard = ({ login, onProfileLoaded, onFetching }: ProfileCardProps) => {
-    const navigate = useNavigate();
-    const [userprofile, setUserprofile] = useState<GitHubUserProfile | null>(null);
-    const [isFetching, setIsFetching] = useState(false);
-
-    useEffect(() => {
-        const controller = new AbortController();
-
-        const loadUserProfile = async () => {
-            try {
-                setIsFetching(true);
-                onFetching(true);
-                setUserprofile(null);
-                onProfileLoaded(null);
-
-                const startTime = Date.now();
-                const data = await userProfile(login, controller.signal);
-
-                const elapsed = Date.now() - startTime;
-                const minDelay = 1200;
-                if (elapsed < minDelay) {
-                    await new Promise((resolve) => setTimeout(resolve, minDelay - elapsed));
-                }
-
-                if (!controller.signal.aborted) {
-                    setUserprofile(data);
-                    onProfileLoaded(data);
-                }
-            } catch (error: unknown) {
-                if (error instanceof Error && error.name !== "CanceledError") {
-                    console.error("Error fetching user profile:", error);
-                    if (!controller.signal.aborted) {
-                        setUserprofile(null);
-                        onProfileLoaded(null);
-                    }
-                }
-            } finally {
-                if (!controller.signal.aborted) {
-                    setIsFetching(false);
-                    onFetching(false);
-                }
-            }
-        };
-
-        if (login) {
-            loadUserProfile();
-        } else {
-            setUserprofile(null);
-            onProfileLoaded(null);
-        }
-
-        return () => {
-            controller.abort();
-        };
-    }, [login]);
+    const { userprofile, isFetching, navigate } = useProfileCard({
+        login,
+        onProfileLoaded,
+        onFetching,
+    });
 
     return (
         <>

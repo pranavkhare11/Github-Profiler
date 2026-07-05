@@ -1,11 +1,13 @@
 import { Outlet, createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 
-import Footer from "../components/layout/Footer";
-import Navbar from "../components/layout/Navbar";
-import NotFoundPage from "../pages/NotFoundPage";
-import ProfilePage from "../pages/ProfilePage";
-import SearchPage from "../pages/SearchPage";
+import Footer from "@components/layout/Footer";
+import Navbar from "@components/layout/Navbar";
+import NotFoundPage from "@pages/NotFound/NotFoundPage";
+import ProfilePage from "@pages/Profile/ProfilePage";
+import SearchPage from "@pages/Search/SearchPage";
+import FollowersPage from "@pages/Followers/FollowersPage";
+import FollowingPage from "@pages/Following/FollowingPage";
 
 const Layout = () => {
 return (
@@ -31,6 +33,14 @@ element: <SearchPage />,
 {
 path: "home",
 element: <SearchPage />,
+},
+{
+path: "profile/:username/followers",
+element: <FollowersPage />,
+},
+{
+path: "profile/:username/following",
+element: <FollowingPage />,
 },
 {
 path: "profile/:username",

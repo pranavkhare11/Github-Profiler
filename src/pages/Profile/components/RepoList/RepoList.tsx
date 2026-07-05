@@ -1,53 +1,14 @@
-import { useEffect, useState } from "react";
-import api from "../../api/client";
-import { GITHUB_ENDPOINTS } from "../../constants/endpoints";
-import type { GitHubRepo } from "../../types/github";
+import { useRepoList } from "./useRepoList";
+import { usePagination } from "@hooks";
+import "./RepoList.css";
 
 interface RepoListProps {
     login: string;
 }
 
 const RepoList = ({ login }: RepoListProps) => {
-    const [repos, setRepos] = useState<GitHubRepo[]>([]);
-    const [isFetching, setIsFetching] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
-
-    useEffect(() => {
-        const controller = new AbortController();
-
-        const fetchRepos = async () => {
-            try {
-                setIsFetching(true);
-                const response = await api.get(GITHUB_ENDPOINTS.userRepos(login), {
-                    params: { per_page: 100 },
-                    signal: controller.signal,
-                });
-                setRepos(response.data);
-            } catch (error: unknown) {
-                if (error instanceof Error && error.name !== "CanceledError") {
-                    console.error("Error fetching repositories:", error);
-                    setRepos([]);
-                }
-            } finally {
-                if (!controller.signal.aborted) {
-                    setIsFetching(false);
-                }
-            }
-        };
-
-        if (login) {
-            fetchRepos();
-        }
-
-        return () => {
-            controller.abort();
-        };
-    }, [login]);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [login]);
+    const { repos, isFetching } = useRepoList(login);
+    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedRepos } = usePagination(repos, 10, login);
 
     if (isFetching) {
         return (
@@ -57,9 +18,6 @@ const RepoList = ({ login }: RepoListProps) => {
             </div>
         );
     }
-
-    const totalPages = Math.ceil(repos.length / itemsPerPage);
-    const displayedRepos = repos.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     return (
         <div className="repos-list-container">

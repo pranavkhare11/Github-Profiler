@@ -1,0 +1,38 @@
+.search-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 24px 0;
+}
+
+.search-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-badge {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: #f8d8d2;
+  color: #9a2e28;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.search-title {
+  font-size: 32px;
+  line-height: 1.05;
+  margin: 0;
+  color: #141312;
+}
+
+.search-subtitle {
+  max-width: 720px;
+  font-size: 16px;
+  color: #4b4a49;
+  margin: 0;
+}

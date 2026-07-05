@@ -1,53 +1,14 @@
-import { useEffect, useState } from "react";
-import api from "../../api/client";
-import { GITHUB_ENDPOINTS } from "../../constants/endpoints";
-import type { GitHubGist } from "../../types/github";
+import { useGistList } from "./useGistList";
+import { usePagination } from "@hooks";
+import "./GistList.css";
 
 interface GistListProps {
     login: string;
 }
 
 const GistList = ({ login }: GistListProps) => {
-    const [gists, setGists] = useState<GitHubGist[]>([]);
-    const [isFetching, setIsFetching] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
-
-    useEffect(() => {
-        const controller = new AbortController();
-
-        const fetchGists = async () => {
-            try {
-                setIsFetching(true);
-                const response = await api.get(GITHUB_ENDPOINTS.userGists(login), {
-                    params: { per_page: 100 },
-                    signal: controller.signal,
-                });
-                setGists(response.data);
-            } catch (error: unknown) {
-                if (error instanceof Error && error.name !== "CanceledError") {
-                    console.error("Error fetching gists:", error);
-                    setGists([]);
-                }
-            } finally {
-                if (!controller.signal.aborted) {
-                    setIsFetching(false);
-                }
-            }
-        };
-
-        if (login) {
-            fetchGists();
-        }
-
-        return () => {
-            controller.abort();
-        };
-    }, [login]);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [login]);
+    const { gists, isFetching } = useGistList(login);
+    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedGists } = usePagination(gists, 10, login);
 
     if (isFetching) {
         return (
@@ -57,9 +18,6 @@ const GistList = ({ login }: GistListProps) => {
             </div>
         );
     }
-
-    const totalPages = Math.ceil(gists.length / itemsPerPage);
-    const displayedGists = gists.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     return (
         <div className="gists-list-container">
