@@ -1,10 +1,18 @@
-.repos-list-container {
+import styled from "styled-components";
+
+export const GistsListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
+`;
 
-.repo-card {
+export const GistsListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const GistCard = styled.a`
   background: 
     radial-gradient(var(--white-3) 1px, transparent 1px),
     linear-gradient(170deg, var(--white-1), var(--white-2));
@@ -16,59 +24,48 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
-.repo-card:hover {
-  border-color: var(--text-main);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-  transform: translateY(-1px);
-  background-image: 
-    radial-gradient(var(--line-2) 1px, transparent 1px),
-    linear-gradient(170deg, var(--white-1), var(--white-2));
-}
+  &:hover {
+    border-color: var(--text-main);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transform: translateY(-1px);
+    background-image: 
+      radial-gradient(var(--line-2) 1px, transparent 1px),
+      linear-gradient(170deg, var(--white-1), var(--white-2));
 
-.repo-card-header {
+    .gist-name-text {
+      text-decoration: underline;
+    }
+  }
+`;
+
+export const GistCardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
+`;
 
-.repo-link {
+export const GistName = styled.span`
   font-size: 1.12rem;
   font-weight: 700;
   color: var(--text-main);
   text-decoration: none;
   letter-spacing: -0.01em;
-}
+`;
 
-.repo-link:hover {
-  text-decoration: underline;
-}
-
-.repo-dot-status {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #00cc66;
-  box-shadow: 0 0 6px #00cc66;
-}
-
-.repo-desc {
-  margin: 0;
-  font-size: 0.92rem;
-  color: var(--text-soft);
-  line-height: 1.4;
-}
-
-.repo-meta-row {
+export const GistMetaRow = styled.div`
   display: flex;
   gap: 12px;
   align-items: center;
   margin-top: 4px;
-}
+  flex-wrap: wrap;
+`;
 
-.repo-lang-tag {
+export const GistFileTag = styled.span`
   font-family: var(--font-dot);
   font-size: 0.72rem;
   letter-spacing: 0.05em;
@@ -78,37 +75,26 @@
   padding: 2px 8px;
   border-radius: 4px;
   border: 1px solid var(--line-2);
-}
+`;
 
-.repo-stat-tag {
-  font-family: var(--font-dot);
-  font-size: 0.72rem;
-  letter-spacing: 0.05em;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-}
+export const RepoDotStatus = styled.span`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00cc66;
+  box-shadow: 0 0 6px #00cc66;
+`;
 
-.repo-icon {
-  font-size: 0.82rem;
-  font-weight: bold;
-  color: var(--text-faint);
-  line-height: 1;
-}
-
-/* Pagination */
-.pagination-container {
+export const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 16px;
   margin-top: 24px;
   padding: 8px 0;
-}
+`;
 
-.pagination-btn {
+export const PaginationBtn = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -122,23 +108,23 @@
   color: var(--text-soft);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
-.pagination-btn:hover:not(:disabled) {
-  border-color: var(--text-main);
-  color: var(--text-main);
-  background: var(--white-3);
-  transform: translateY(-1px);
-}
+  &:hover:not(:disabled) {
+    border-color: var(--text-main);
+    color: var(--text-main);
+    background: var(--white-3);
+    transform: translateY(-1px);
+  }
 
-.pagination-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+`;
 
-.pagination-info {
+export const PaginationInfo = styled.span`
   font-family: var(--font-dot);
   font-size: 0.72rem;
   letter-spacing: 0.05em;
   color: var(--text-faint);
-}
+`;

@@ -16,7 +16,7 @@
 
   --font-ui: "Manrope", "Segoe UI", sans-serif;
   --font-dot: "DotGothic16", "Courier New", monospace;
-  --shell-max: 1120px;
+  --shell-max: 1440px;
 
   font: 16px/1.5 var(--font-ui);
   color: var(--text-main);
@@ -40,7 +40,7 @@ body {
 }
 
 #root {
-  width: min(1200px, 100%);
+  width: min(1500px, 100%);
   margin: 0 auto;
   min-height: 100svh;
   display: flex;

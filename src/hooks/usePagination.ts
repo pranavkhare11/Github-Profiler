@@ -1,17 +1,50 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router";
 
-function usePagination<T>(items: T[], itemsPerPage = 10, dependency?: any) {
-    const [currentPage, setCurrentPage] = useState(1);
+function usePagination<T>(items: T[], itemsPerPage = 10, dependency?: any, pathPrefix?: string) {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [dependency]);
+    const pageParam = searchParams.get("page");
+    const currentPage = pageParam ? parseInt(pageParam, 10) || 1 : 1;
 
     const totalPages = Math.ceil(items.length / itemsPerPage);
-    const displayedItems = items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const validPage = totalPages > 0 ? Math.min(Math.max(currentPage, 1), totalPages) : 1;
+
+    const setCurrentPage = (pageOrFn: number | ((prev: number) => number)) => {
+        const nextPage = typeof pageOrFn === "function" ? pageOrFn(validPage) : pageOrFn;
+        const nextParams = new URLSearchParams(searchParams);
+        let targetPath = pathPrefix;
+
+        if (nextPage <= 1) {
+            nextParams.delete("page");
+            if (pathPrefix && pathPrefix.endsWith("/repos")) {
+                targetPath = pathPrefix.slice(0, -6); // Strip "/repos"
+            }
+        } else {
+            nextParams.set("page", String(nextPage));
+        }
+
+        if (targetPath) {
+            const queryStr = nextParams.toString();
+            navigate(queryStr ? `${targetPath}?${queryStr}` : targetPath);
+        } else {
+            setSearchParams(nextParams);
+        }
+    };
+
+    useEffect(() => {
+        if (searchParams.has("page")) {
+            const nextParams = new URLSearchParams(searchParams);
+            nextParams.delete("page");
+            setSearchParams(nextParams, { replace: true });
+        }
+    }, [dependency]);
+
+    const displayedItems = items.slice((validPage - 1) * itemsPerPage, validPage * itemsPerPage);
 
     return {
-        currentPage,
+        currentPage: validPage,
         setCurrentPage,
         totalPages,
         displayedItems,

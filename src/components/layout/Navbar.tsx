@@ -1,56 +1,56 @@
 import { useLocation, Link } from "react-router";
 import SearchBar from "@pages/Search/components/SearchBar/SearchBar";
-import "./Navbar.css";
+import * as S from "./Navbar.styles";
 
 const Navbar = () => {
   const location = useLocation();
   const isSearchPage = location.pathname === "/" || location.pathname === "/home";
 
   return (
-    <nav className="panel navbar">
-      <div className="navbar-content">
-        <Link to="/" className="brand-left-link">
-          <div className="brand-left">
-            <div className="brand-lens">
-              <div className="lens-inner" />
-            </div>
-            <div className="brand-title-group">
-              <h1 className="brand-title">GitHub Profiler</h1>
-              <span className="brand-subtitle-spec">SYS.OP [GP-4004]</span>
-            </div>
-          </div>
-        </Link>
+    <S.NavbarContainer className="panel">
+      <S.NavbarContent>
+        <S.BrandLeftLink as={Link} to="/">
+          <S.BrandLeft>
+            <S.BrandLens>
+              <S.LensInner />
+            </S.BrandLens>
+            <S.BrandTitleGroup>
+              <S.BrandTitle>GitHub Profiler</S.BrandTitle>
+              <S.BrandSubtitleSpec>SYS.OP [GP-4004]</S.BrandSubtitleSpec>
+            </S.BrandTitleGroup>
+          </S.BrandLeft>
+        </S.BrandLeftLink>
 
-        <div className="navbar-right">
+        <S.NavbarRight>
           {!isSearchPage ? (
-            <div className="navbar-search-container">
+            <S.NavbarSearchContainer>
               <SearchBar placeholder="Search users..." variant="default" />
-            </div>
+            </S.NavbarSearchContainer>
           ) : (
-            <div className="navbar-decor" aria-hidden="true">
-              <div className="decor-spec-group">
-                <span className="decor-spec-label">NT.OS-V2.6.4</span>
-                <span className="decor-spec-status">SYS.STATUS // OK</span>
-              </div>
+            <S.NavbarDecor aria-hidden="true">
+              <S.DecorSpecGroup>
+                <S.DecorSpecLabel>NT.OS-V2.6.4</S.DecorSpecLabel>
+                <S.DecorSpecStatus>SYS.STATUS // OK</S.DecorSpecStatus>
+              </S.DecorSpecGroup>
               
-              <div className="decor-glyph-dial">
-                <div className="waveform-line wave-1" />
-                <div className="waveform-line wave-2" />
-                <div className="waveform-line wave-3" />
-                <div className="waveform-line wave-4" />
-                <div className="waveform-line wave-5" />
-              </div>
+              <S.DecorGlyphDial>
+                <S.WaveformLine $index={1} />
+                <S.WaveformLine $index={2} />
+                <S.WaveformLine $index={3} />
+                <S.WaveformLine $index={4} />
+                <S.WaveformLine $index={5} />
+              </S.DecorGlyphDial>
               
-              <div className="decor-hardware-group">
-                <span className="decor-led led-red" />
-                <span className="decor-screw" />
-                <span className="decor-shape shape-pill" />
-              </div>
-            </div>
+              <S.DecorHardwareGroup>
+                <S.DecorLed />
+                <S.DecorScrew />
+                <S.DecorShapePill />
+              </S.DecorHardwareGroup>
+            </S.NavbarDecor>
           )}
-        </div>
-      </div>
-    </nav>
+        </S.NavbarRight>
+      </S.NavbarContent>
+    </S.NavbarContainer>
   );
 };
 

@@ -1,6 +1,7 @@
 import { useProfileCard } from "./useProfileCard";
 import type { GitHubUserProfile } from "@app-types/github";
-import "./ProfileCard.css";
+import { useRecentSearches, type RecentSearchItem } from "@hooks";
+import * as S from "./ProfileCard.styles";
 
 interface ProfileCardProps {
     login: string;
@@ -15,6 +16,13 @@ const ProfileCard = ({ login, onProfileLoaded, onFetching }: ProfileCardProps) =
         onFetching,
     });
 
+    const { recentSearches, addSearch, clearSearches } = useRecentSearches();
+
+    const handleRecentClick = (item: RecentSearchItem) => {
+        addSearch(item);
+        navigate(`/profile/${encodeURIComponent(item.login)}`);
+    };
+
     return (
         <>
             {isFetching ? (
@@ -23,39 +31,81 @@ const ProfileCard = ({ login, onProfileLoaded, onFetching }: ProfileCardProps) =
                     <span>Fetching profile from Neural Spine<span className="loading-dots" /></span>
                 </div>
             ) : userprofile ? (
-                <div className="profile-card-wrapper">
-                    <div className="meta-chip">Profile</div>
-                    <div className="profile-details-card">
-                        <div className="profile-avatar-zone">
-                            <div className="profile-avatar-coil-ring">
-                                <div className="profile-lens-wrapper">
-                                    <img src={userprofile.avatar_url} alt={userprofile.login} className="profile-avatar-img" />
-                                    <div className="profile-lens-reflection" />
-                                    <span className="profile-red-indicator" />
-                                </div>
-                            </div>
-                        </div>
+                <S.ProfileCardWrapper>
+                    <S.MetaChip>Profile</S.MetaChip>
+                    <S.ProfileDetailsCard>
+                        <S.ProfileAvatarZone>
+                            <S.ProfileAvatarCoilRing>
+                                <S.ProfileLensWrapper>
+                                    <S.ProfileAvatarImg src={userprofile.avatar_url} alt={userprofile.login} />
+                                    <S.ProfileLensReflection />
+                                    <S.ProfileRedIndicator />
+                                </S.ProfileLensWrapper>
+                            </S.ProfileAvatarCoilRing>
+                        </S.ProfileAvatarZone>
 
-                        <div className="profile-info-zone">
-                            <div className="profile-meta-header">
-                                <span className="profile-username-tag">@{userprofile.login}</span>
-                                {userprofile.location && <span className="profile-location-tag">{userprofile.location}</span>}
-                            </div>
-                            <h1 className="profile-name">{userprofile.name || userprofile.login}</h1>
-                            {userprofile.bio && <p className="profile-bio">{userprofile.bio}</p>}
+                        <S.ProfileInfoZone>
+                            <S.ProfileMetaHeader>
+                                <S.ProfileUsernameTag>@{userprofile.login}</S.ProfileUsernameTag>
+                                {userprofile.location && <S.ProfileLocationTag>{userprofile.location}</S.ProfileLocationTag>}
+                            </S.ProfileMetaHeader>
+                            <S.ProfileName>{userprofile.name || userprofile.login}</S.ProfileName>
+                            {userprofile.bio && <S.ProfileBio>{userprofile.bio}</S.ProfileBio>}
 
-                            <p className="profile-text-detail clickable-detail" onClick={() => navigate(`/profile/${userprofile.login}/followers`)}>Followers: {userprofile.followers}</p>
-                            <p className="profile-text-detail clickable-detail" onClick={() => navigate(`/profile/${userprofile.login}/following`)}>Following: {userprofile.following}</p>
+                            <S.ProfileTextDetail $clickable onClick={() => navigate(`/profile/${userprofile.login}/followers`)}>
+                                Followers: {userprofile.followers}
+                            </S.ProfileTextDetail>
+                            <S.ProfileTextDetail $clickable onClick={() => navigate(`/profile/${userprofile.login}/following`)}>
+                                Following: {userprofile.following}
+                            </S.ProfileTextDetail>
                             {userprofile.email && (
-                                <p className="profile-text-detail">
-                                    Email: <a href={`mailto:${userprofile.email}`} className="email-value">{userprofile.email}</a>
-                                </p>
+                                <S.ProfileTextDetail>
+                                    Email: <S.EmailValue href={`mailto:${userprofile.email}`}>{userprofile.email}</S.EmailValue>
+                                </S.ProfileTextDetail>
                             )}
-                        </div>
-                    </div>
-                </div>
+                        </S.ProfileInfoZone>
+                    </S.ProfileDetailsCard>
+                </S.ProfileCardWrapper>
             ) : (
-                <div className="status-text">No profile found</div>
+                <S.NotFoundWrapper>
+                    <div className="status-text">No profile found</div>
+                    {recentSearches.length > 0 && (
+                        <S.RecentSearchesContainer>
+                            <S.RecentSearchesHeader>
+                                <S.RecentSearchesTitle>Recent Searches</S.RecentSearchesTitle>
+                                <S.RecentSearchesClear onClick={clearSearches}>Clear All</S.RecentSearchesClear>
+                            </S.RecentSearchesHeader>
+                            <S.RecentSearchesGrid>
+                                {recentSearches.map((item) => (
+                                    <S.RecentSearchCard key={item.login} onClick={() => handleRecentClick(item)}>
+                                        <S.RecentSearchCardContent>
+                                            <S.RecentSearchAvatarContainer>
+                                                <S.RecentSearchAvatar
+                                                    src={item.avatar_url}
+                                                    alt={`${item.login}'s avatar`}
+                                                    loading="lazy"
+                                                />
+                                            </S.RecentSearchAvatarContainer>
+                                            <S.RecentSearchInfo>
+                                                <S.RecentSearchUsername>
+                                                    {item.login}
+                                                </S.RecentSearchUsername>
+                                                <S.RecentSearchGithubLink
+                                                    href={item.html_url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    GitHub Profile ↗
+                                                </S.RecentSearchGithubLink>
+                                            </S.RecentSearchInfo>
+                                        </S.RecentSearchCardContent>
+                                    </S.RecentSearchCard>
+                                ))}
+                            </S.RecentSearchesGrid>
+                        </S.RecentSearchesContainer>
+                    )}
+                </S.NotFoundWrapper>
             )}
         </>
     );

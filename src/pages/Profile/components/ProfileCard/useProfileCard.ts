@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import api from "@api/client";
-import { GITHUB_ENDPOINTS } from "@constants/endpoints";
-import { useAbortController } from "@hooks";
+import { userProfile } from "@api/github";
+import { useAbortController, addRecentSearch } from "@hooks";
 import type { GitHubUserProfile } from "@app-types/github";
 
 interface UseProfileCardParams {
@@ -27,8 +26,7 @@ export const useProfileCard = ({ login, onProfileLoaded, onFetching }: UseProfil
                 onProfileLoaded(null);
 
                 const startTime = Date.now();
-                const response = await api.get(GITHUB_ENDPOINTS.userProfile(login), { signal });
-                const data = response.data as GitHubUserProfile;
+                const data = await userProfile(login, signal);
 
                 const elapsed = Date.now() - startTime;
                 const minDelay = 1200;
@@ -39,6 +37,11 @@ export const useProfileCard = ({ login, onProfileLoaded, onFetching }: UseProfil
                 if (!signal.aborted) {
                     setUserprofile(data);
                     onProfileLoaded(data);
+                    addRecentSearch({
+                        login: data.login,
+                        avatar_url: data.avatar_url,
+                        html_url: `https://github.com/${data.login}`,
+                    });
                 }
             } catch (error: unknown) {
                 if (error instanceof Error && error.name !== "CanceledError") {

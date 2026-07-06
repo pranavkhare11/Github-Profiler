@@ -1,13 +1,13 @@
-import "./Footer.css";
+import * as S from "./Footer.styles";
 
 const Footer = () => {
 	return (
-		<footer className="footer">
-			<div className="panel footer-content">
-				<span className="footer-brand">github profiler</span>
-				<span className="footer-signs">scan.log.2026.07 • ce</span>
-			</div>
-		</footer>
+		<S.FooterContainer>
+			<S.FooterContent className="panel">
+				<S.FooterBrand>github profiler</S.FooterBrand>
+				<S.FooterSigns>scan.log.2026.07 • ce</S.FooterSigns>
+			</S.FooterContent>
+		</S.FooterContainer>
 	);
 };
 

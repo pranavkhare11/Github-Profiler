@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "@api/client";
-import { GITHUB_ENDPOINTS } from "@constants/endpoints";
+import { userGists } from "@api/github";
 import { useAbortController } from "@hooks";
 import type { GitHubGist } from "@app-types/github";
 
@@ -14,11 +13,8 @@ export const useGistList = (login: string) => {
             const signal = getSignal();
             try {
                 setIsFetching(true);
-                const response = await api.get(GITHUB_ENDPOINTS.userGists(login), {
-                    params: { per_page: 100 },
-                    signal,
-                });
-                setGists(response.data);
+                const data = await userGists(login, signal);
+                setGists(data);
             } catch (error: unknown) {
                 if (error instanceof Error && error.name !== "CanceledError") {
                     console.error("Error fetching gists:", error);

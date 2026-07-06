@@ -1,10 +1,13 @@
-.flex {
+import styled from "styled-components";
+
+export const ProfileTabsFlex = styled.div`
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-}
+  margin-top: 14px;
+`;
 
-.pill {
+export const ProfileTabPill = styled.div<{ $active?: boolean }>`
   display: inline-flex;
   align-items: center;
   padding: 6px 14px;
@@ -19,31 +22,32 @@
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-}
 
-.pill:hover {
-  border-color: var(--text-main);
-  color: var(--text-main);
-  background: var(--white-3);
-  transform: translateY(-1px);
-}
+  &:hover {
+    border-color: var(--text-main);
+    color: var(--text-main);
+    background: var(--white-3);
+    transform: translateY(-1px);
+  }
 
-.pill.active {
-  border-color: var(--text-main);
-  background: var(--white-1);
-  color: var(--text-main);
-  font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-}
+  ${props => props.$active && `
+    border-color: var(--text-main);
+    background: var(--white-1);
+    color: var(--text-main);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  `}
+`;
 
-.tab-active-dot {
+export const TabActiveDot = styled.span`
   width: 6px;
   height: 6px;
   background: var(--red);
   border-radius: 50%;
   box-shadow: 0 0 4px var(--red);
-}
+  margin-right: 6px;
+`;
 
-.tab-view-content {
+export const TabViewContent = styled.div`
   margin-top: 20px;
-}
+`;

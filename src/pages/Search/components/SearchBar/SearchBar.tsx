@@ -1,6 +1,6 @@
-import { type CSSProperties } from "react";
+import { type CSSProperties, useEffect } from "react";
 import { useSearchBar } from "./useSearchBar";
-import "./SearchBar.css";
+import * as S from "./SearchBar.styles";
 
 interface SearchBarProps {
     placeholder?: string;
@@ -12,6 +12,7 @@ interface SearchBarProps {
     suggestionListStyle?: CSSProperties;
     suggestionItemStyle?: CSSProperties;
     avatarStyle?: CSSProperties;
+    onSuggestionsVisibilityChange?: (visible: boolean) => void;
 }
 
 const SearchBar = ({
@@ -24,10 +25,11 @@ const SearchBar = ({
     suggestionListStyle,
     suggestionItemStyle,
     avatarStyle,
+    onSuggestionsVisibilityChange,
 }: SearchBarProps) => {
     const {
         user,
-        isLoading,
+        isSearching,
         suggestions,
         isOpen,
         containerRef,
@@ -36,57 +38,69 @@ const SearchBar = ({
         handleSearch,
         selectSuggestion,
         setIsOpen,
+        username,
     } = useSearchBar();
 
+    const suggestionsVisible = isOpen && hasMinimumInput && (isSearching || suggestions.length > 0);
+
+    useEffect(() => {
+        onSuggestionsVisibilityChange?.(suggestionsVisible);
+    }, [suggestionsVisible, onSuggestionsVisibilityChange]);
+
     return (
-        <div
+        <S.SearchBarContainer
             ref={containerRef}
-            className={`searchbar ${variant === "compact" ? "searchbar--stack" : ""}`.trim()}
+            $stacked={variant === "compact"}
             style={containerStyle}
         >
-            <input
+            <S.SearchBarControl
                 type="text"
                 placeholder={placeholder}
-                className="searchbar-control"
                 style={inputStyle}
                 value={user}
                 onChange={handleInputChange}
-                onFocus={() => setIsOpen(true)}
+                onFocus={() => {
+                    if (!username || user.trim().toLowerCase() !== username.trim().toLowerCase()) {
+                        setIsOpen(true);
+                    }
+                }}
                 autoComplete="chrome-off-random-string"
             />
-            <button className="searchbar-button" style={buttonStyle} onClick={handleSearch}>Search</button>
+            <S.SearchBarButton style={buttonStyle} onClick={handleSearch}>
+                Search
+            </S.SearchBarButton>
 
             {isOpen && hasMinimumInput && (
-                <div className="searchbar-results" style={resultsStyle}>
-                    {isLoading ? (
-                        <div className="searchbar-helper">Loading...</div>
+                <S.SearchBarResults style={resultsStyle}>
+                    {isSearching ? (
+                        <S.SearchBarHelper>Loading...</S.SearchBarHelper>
                     ) : suggestions.length > 0 ? (
-                        <ul className="searchbar-list" style={suggestionListStyle}>
+                        <S.SearchBarList style={suggestionListStyle}>
                             {suggestions.map((suggestion) => (
                                 <li key={suggestion.id}>
-                                    <button
+                                    <S.SearchBarItem
                                         type="button"
-                                        className="searchbar-item"
                                         style={suggestionItemStyle}
                                         onClick={() => selectSuggestion(suggestion.login)}
                                     >
-                                        <img
+                                        <S.SearchBarAvatar
                                             src={suggestion.avatar_url}
                                             alt={`${suggestion.login} avatar`}
-                                            className="searchbar-avatar"
                                             style={avatarStyle}
                                         />
                                         <span>{suggestion.login}</span>
-                                    </button>
+                                    </S.SearchBarItem>
                                 </li>
                             ))}
-                        </ul>
+                        </S.SearchBarList>
                     ) : (
-                        <div className="searchbar-helper" style={suggestionItemStyle}>No suggestions found.</div>
+                        <S.SearchBarHelper style={suggestionItemStyle}>
+                            No suggestions found.
+                        </S.SearchBarHelper>
                     )}
-                </div>
+                </S.SearchBarResults>
             )}
-        </div>
+        </S.SearchBarContainer>
     );
 };
 

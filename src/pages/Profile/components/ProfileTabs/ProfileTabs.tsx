@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router";
 import RepoList from "@pages/Profile/components/RepoList/RepoList";
 import GistList from "@pages/Profile/components/GistList/GistList";
-import "./ProfileTabs.css";
+import * as S from "./ProfileTabs.styles";
 
 interface ProfileTabsProps {
     login: string;
@@ -16,30 +16,30 @@ const ProfileTabs = ({ login, publicRepos, publicGists }: ProfileTabsProps) => {
 
     return (
         <>
-            <div className="flex" style={{ marginTop: "14px" }}>
-                <div
-                    className={`pill ${activeTab === "repos" ? "active" : ""}`}
+            <S.ProfileTabsFlex>
+                <S.ProfileTabPill
+                    $active={activeTab === "repos"}
                     onClick={() => navigate(`/profile/${login}/repos`)}
                 >
-                    {activeTab === "repos" && <span className="tab-active-dot" style={{ marginRight: "6px" }} />}
+                    {activeTab === "repos" && <S.TabActiveDot />}
                     Public Repos: {publicRepos}
-                </div>
-                <div
-                    className={`pill ${activeTab === "gists" ? "active" : ""}`}
+                </S.ProfileTabPill>
+                <S.ProfileTabPill
+                    $active={activeTab === "gists"}
                     onClick={() => navigate(`/profile/${login}/gists`)}
                 >
-                    {activeTab === "gists" && <span className="tab-active-dot" style={{ marginRight: "6px" }} />}
+                    {activeTab === "gists" && <S.TabActiveDot />}
                     Public Gists: {publicGists}
-                </div>
-            </div>
+                </S.ProfileTabPill>
+            </S.ProfileTabsFlex>
 
-            <div className="tab-view-content">
+            <S.TabViewContent>
                 {activeTab === "repos" ? (
                     <RepoList login={login} />
                 ) : (
                     <GistList login={login} />
                 )}
-            </div>
+            </S.TabViewContent>
         </>
     );
 };

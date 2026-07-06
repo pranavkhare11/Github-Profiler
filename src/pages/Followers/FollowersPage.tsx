@@ -1,7 +1,7 @@
-import { useNavigate, Link } from "react-router";
+import { useNavigate } from "react-router";
 import { useFollowers } from "./useFollowers";
 import { usePagination } from "@hooks";
-import "./FollowersPage.css";
+import * as S from "./FollowersPage.styles";
 
 const FollowersPage = () => {
     const navigate = useNavigate();
@@ -21,73 +21,70 @@ const FollowersPage = () => {
 
     return (
         <section className="panel content-panel">
-            <div className="followers-header-row">
-                <button className="pill-back-btn" onClick={() => navigate(`/profile/${username}`)}>
+            <S.FollowersHeaderRow>
+                <S.PillBackBtn onClick={() => navigate(`/profile/${username}`)}>
                     ← BACK TO PROFILE
-                </button>
+                </S.PillBackBtn>
                 <div className="search-badge" style={{ alignSelf: "flex-start", marginTop: "12px" }}>SUBSCRIBERS</div>
                 <h2 className="page-title">{username}'s followers</h2>
-            </div>
+            </S.FollowersHeaderRow>
 
-            <div className="followers-list-container">
+            <S.FollowersListContainer>
                 {followers.length > 0 ? (
                     <>
-                        <div className="followers-grid">
+                        <S.FollowersGrid>
                             {displayedFollowers.map((follower) => (
-                                <div key={follower.id} className="follower-card">
-                                    <div className="follower-card-content">
-                                        <div className="follower-avatar-container">
-                                            <img
-                                                className="follower-avatar"
+                                <S.FollowerCard key={follower.id} onClick={() => navigate(`/profile/${follower.login}`)}>
+                                    <S.FollowerCardContent>
+                                        <S.FollowerAvatarContainer>
+                                            <S.FollowerAvatar
                                                 src={follower.avatar_url}
                                                 alt={`${follower.login}'s avatar`}
                                                 loading="lazy"
                                             />
-                                        </div>
-                                        <div className="follower-info">
-                                            <Link to={`/profile/${follower.login}`} className="follower-username">
+                                        </S.FollowerAvatarContainer>
+                                        <S.FollowerInfo>
+                                            <S.FollowerUsername>
                                                 {follower.login}
-                                            </Link>
-                                            <a
-                                                className="follower-github-link"
+                                            </S.FollowerUsername>
+                                            <S.FollowerGithubLink
                                                 href={follower.html_url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                onClick={(e) => e.stopPropagation()}
                                             >
                                                 GitHub Profile ↗
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                            </S.FollowerGithubLink>
+                                        </S.FollowerInfo>
+                                    </S.FollowerCardContent>
+                                </S.FollowerCard>
                             ))}
-                        </div>
+                        </S.FollowersGrid>
 
                         {totalPages > 1 && (
-                            <div className="pagination-container">
-                                <button
-                                    className="pagination-btn"
+                            <S.PaginationContainer>
+                                <S.PaginationBtn
                                     disabled={currentPage === 1}
                                     onClick={() => setCurrentPage((prev) => prev - 1)}
                                 >
                                     PREV
-                                </button>
-                                <span className="pagination-info">
+                                </S.PaginationBtn>
+                                <S.PaginationInfo>
                                     PAGE {String(currentPage).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
-                                </span>
-                                <button
-                                    className="pagination-btn"
+                                </S.PaginationInfo>
+                                <S.PaginationBtn
                                     disabled={currentPage === totalPages}
                                     onClick={() => setCurrentPage((prev) => prev + 1)}
                                 >
                                     NEXT
-                                </button>
-                            </div>
+                                </S.PaginationBtn>
+                            </S.PaginationContainer>
                         )}
                     </>
                 ) : (
                     <div className="status-text">No followers found.</div>
                 )}
-            </div>
+            </S.FollowersListContainer>
         </section>
     );
 };

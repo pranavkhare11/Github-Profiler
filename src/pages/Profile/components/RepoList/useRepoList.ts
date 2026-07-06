@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "@api/client";
-import { GITHUB_ENDPOINTS } from "@constants/endpoints";
+import { userRepos } from "@api/github";
 import { useAbortController } from "@hooks";
 import type { GitHubRepo } from "@app-types/github";
 
@@ -14,11 +13,8 @@ export const useRepoList = (login: string) => {
             const signal = getSignal();
             try {
                 setIsFetching(true);
-                const response = await api.get(GITHUB_ENDPOINTS.userRepos(login), {
-                    params: { per_page: 100 },
-                    signal,
-                });
-                setRepos(response.data);
+                const data = await userRepos(login, signal);
+                setRepos(data);
             } catch (error: unknown) {
                 if (error instanceof Error && error.name !== "CanceledError") {
                     console.error("Error fetching repositories:", error);

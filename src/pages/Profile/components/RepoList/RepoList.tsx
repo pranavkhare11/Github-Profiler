@@ -1,6 +1,6 @@
 import { useRepoList } from "./useRepoList";
 import { usePagination } from "@hooks";
-import "./RepoList.css";
+import * as S from "./RepoList.styles";
 
 interface RepoListProps {
     login: string;
@@ -8,7 +8,7 @@ interface RepoListProps {
 
 const RepoList = ({ login }: RepoListProps) => {
     const { repos, isFetching } = useRepoList(login);
-    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedRepos } = usePagination(repos, 10, login);
+    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedRepos } = usePagination(repos, 10, login, `/profile/${login}/repos`);
 
     if (isFetching) {
         return (
@@ -20,59 +20,57 @@ const RepoList = ({ login }: RepoListProps) => {
     }
 
     return (
-        <div className="repos-list-container">
+        <S.ReposListContainer>
             {repos.length > 0 ? (
                 <>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                    <S.ReposListWrapper>
                         {displayedRepos.map((repo) => (
-                            <div key={repo.id} className="repo-card">
-                                <div className="repo-card-header">
-                                    <a
-                                        href={repo.html_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="repo-link"
-                                    >
+                            <S.RepoCard
+                                key={repo.id}
+                                href={repo.html_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <S.RepoCardHeader>
+                                    <S.RepoName className="repo-name-text">
                                         {repo.name}
-                                    </a>
-                                    <span className="repo-dot-status" />
-                                </div>
-                                {repo.description && <p className="repo-desc">{repo.description}</p>}
-                                <div className="repo-meta-row">
-                                    {repo.language && <span className="repo-lang-tag">{repo.language}</span>}
-                                    <span className="repo-stat-tag">★ {repo.stargazers_count}</span>
-                                    <span className="repo-stat-tag">⑂ {repo.forks_count}</span>
-                                </div>
-                            </div>
+                                    </S.RepoName>
+                                    <S.RepoDotStatus />
+                                </S.RepoCardHeader>
+                                {repo.description && <S.RepoDesc>{repo.description}</S.RepoDesc>}
+                                <S.RepoMetaRow>
+                                    {repo.language && <S.RepoLangTag>{repo.language}</S.RepoLangTag>}
+                                    <S.RepoStatTag>★ {repo.stargazers_count}</S.RepoStatTag>
+                                    <S.RepoStatTag>⑂ {repo.forks_count}</S.RepoStatTag>
+                                </S.RepoMetaRow>
+                            </S.RepoCard>
                         ))}
-                    </div>
+                    </S.ReposListWrapper>
 
                     {totalPages > 1 && (
-                        <div className="pagination-container">
-                            <button
-                                className="pagination-btn"
+                        <S.PaginationContainer>
+                            <S.PaginationBtn
                                 disabled={currentPage === 1}
                                 onClick={() => setCurrentPage((prev) => prev - 1)}
                             >
                                 PREV
-                            </button>
-                            <span className="pagination-info">
+                            </S.PaginationBtn>
+                            <S.PaginationInfo>
                                 PAGE {String(currentPage).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
-                            </span>
-                            <button
-                                className="pagination-btn"
+                            </S.PaginationInfo>
+                            <S.PaginationBtn
                                 disabled={currentPage === totalPages}
                                 onClick={() => setCurrentPage((prev) => prev + 1)}
                             >
                                 NEXT
-                            </button>
-                        </div>
+                            </S.PaginationBtn>
+                        </S.PaginationContainer>
                     )}
                 </>
             ) : (
                 <div className="status-text">No public repositories found.</div>
             )}
-        </div>
+        </S.ReposListContainer>
     );
 };
 

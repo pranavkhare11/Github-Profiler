@@ -1,6 +1,6 @@
 import { useGistList } from "./useGistList";
 import { usePagination } from "@hooks";
-import "./GistList.css";
+import * as S from "./GistList.styles";
 
 interface GistListProps {
     login: string;
@@ -8,7 +8,7 @@ interface GistListProps {
 
 const GistList = ({ login }: GistListProps) => {
     const { gists, isFetching } = useGistList(login);
-    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedGists } = usePagination(gists, 10, login);
+    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedGists } = usePagination(gists, 10, login, `/profile/${login}/gists`);
 
     if (isFetching) {
         return (
@@ -20,64 +20,62 @@ const GistList = ({ login }: GistListProps) => {
     }
 
     return (
-        <div className="gists-list-container">
+        <S.GistsListContainer>
             {gists.length > 0 ? (
                 <>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                    <S.GistsListWrapper>
                         {displayedGists.map((gist) => {
                             const fileNames = Object.keys(gist.files);
                             const displayTitle = gist.description || (fileNames.length > 0 ? fileNames[0] : "Unnamed Gist");
                             return (
-                                <div key={gist.id} className="gist-card">
-                                    <div className="gist-card-header">
-                                        <a
-                                            href={gist.html_url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="gist-link"
-                                        >
+                                <S.GistCard
+                                    key={gist.id}
+                                    href={gist.html_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <S.GistCardHeader>
+                                        <S.GistName className="gist-name-text">
                                             {displayTitle}
-                                        </a>
-                                        <span className="repo-dot-status" />
-                                    </div>
-                                    <div className="gist-meta-row">
+                                        </S.GistName>
+                                        <S.RepoDotStatus />
+                                    </S.GistCardHeader>
+                                    <S.GistMetaRow>
                                         {fileNames.map((fileName) => (
-                                            <span key={fileName} className="gist-file-tag">
+                                            <S.GistFileTag key={fileName}>
                                                 {fileName}
-                                            </span>
+                                            </S.GistFileTag>
                                         ))}
-                                    </div>
-                                </div>
+                                    </S.GistMetaRow>
+                                </S.GistCard>
                             );
                         })}
-                    </div>
+                    </S.GistsListWrapper>
 
                     {totalPages > 1 && (
-                        <div className="pagination-container">
-                            <button
-                                className="pagination-btn"
+                        <S.PaginationContainer>
+                            <S.PaginationBtn
                                 disabled={currentPage === 1}
                                 onClick={() => setCurrentPage((prev) => prev - 1)}
                             >
                                 PREV
-                            </button>
-                            <span className="pagination-info">
+                            </S.PaginationBtn>
+                            <S.PaginationInfo>
                                 PAGE {String(currentPage).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
-                            </span>
-                            <button
-                                className="pagination-btn"
+                            </S.PaginationInfo>
+                            <S.PaginationBtn
                                 disabled={currentPage === totalPages}
                                 onClick={() => setCurrentPage((prev) => prev + 1)}
                             >
                                 NEXT
-                            </button>
-                        </div>
+                            </S.PaginationBtn>
+                        </S.PaginationContainer>
                     )}
                 </>
             ) : (
                 <div className="status-text">No public gists found.</div>
             )}
-        </div>
+        </S.GistsListContainer>
     );
 };
 

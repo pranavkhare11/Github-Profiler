@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, type ChangeEvent } from "react";
 import { useNavigate, useLocation, useParams } from "react-router";
-import api from "@api/client";
-import { GITHUB_ENDPOINTS } from "@constants/endpoints";
+import { searchUsers } from "@api/github";
 import { useDebounce, useAbortController } from "@hooks";
 import type { GitHubUserSuggestion } from "@app-types/github";
 
@@ -32,10 +31,7 @@ export const useSearchBar = () => {
 
         const loadSuggestions = async () => {
             try {
-                const response = await api.get(GITHUB_ENDPOINTS.searchUsers(trimmedQuery), {
-                    signal,
-                });
-                const data = response.data?.items || [];
+                const data = await searchUsers(trimmedQuery, signal);
                 setSuggestions(data);
             } catch (error: unknown) {
                 if (error instanceof Error && error.name !== "CanceledError") {
@@ -115,10 +111,13 @@ export const useSearchBar = () => {
         navigate(`/profile/${encodeURIComponent(login)}`);
     };
 
+    const isSearching = isLoading || (user.trim() !== debouncedUser.trim() && user.trim().length >= 3);
+
     return {
         user,
         setUser,
         isLoading,
+        isSearching,
         suggestions,
         isOpen,
         setIsOpen,
@@ -128,5 +127,6 @@ export const useSearchBar = () => {
         handleInputChange,
         handleSearch,
         selectSuggestion,
+        username,
     };
 };

@@ -1,7 +1,7 @@
-import { useNavigate, Link } from "react-router";
+import { useNavigate } from "react-router";
 import { useFollowing } from "./useFollowing";
 import { usePagination } from "@hooks";
-import "./FollowingPage.css";
+import * as S from "./FollowingPage.styles";
 
 const FollowingPage = () => {
     const navigate = useNavigate();
@@ -21,73 +21,70 @@ const FollowingPage = () => {
 
     return (
         <section className="panel content-panel">
-            <div className="following-header-row">
-                <button className="pill-back-btn" onClick={() => navigate(`/profile/${username}`)}>
+            <S.FollowingHeaderRow>
+                <S.PillBackBtn onClick={() => navigate(`/profile/${username}`)}>
                     ← BACK TO PROFILE
-                </button>
+                </S.PillBackBtn>
                 <div className="search-badge" style={{ alignSelf: "flex-start", marginTop: "12px" }}>SUBSCRIPTIONS</div>
                 <h2 className="page-title">{username} follows</h2>
-            </div>
+            </S.FollowingHeaderRow>
 
-            <div className="following-list-container">
+            <S.FollowingListContainer>
                 {following.length > 0 ? (
                     <>
-                        <div className="following-grid">
+                        <S.FollowingGrid>
                             {displayedFollowing.map((followedUser) => (
-                                <div key={followedUser.id} className="following-card">
-                                    <div className="following-card-content">
-                                        <div className="following-avatar-container">
-                                            <img
-                                                className="following-avatar"
+                                <S.FollowingCard key={followedUser.id} onClick={() => navigate(`/profile/${followedUser.login}`)}>
+                                    <S.FollowingCardContent>
+                                        <S.FollowingAvatarContainer>
+                                            <S.FollowingAvatar
                                                 src={followedUser.avatar_url}
                                                 alt={`${followedUser.login}'s avatar`}
                                                 loading="lazy"
                                             />
-                                        </div>
-                                        <div className="following-info">
-                                            <Link to={`/profile/${followedUser.login}`} className="following-username">
+                                        </S.FollowingAvatarContainer>
+                                        <S.FollowingInfo>
+                                            <S.FollowingUsername>
                                                 {followedUser.login}
-                                            </Link>
-                                            <a
-                                                className="following-github-link"
+                                            </S.FollowingUsername>
+                                            <S.FollowingGithubLink
                                                 href={followedUser.html_url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                onClick={(e) => e.stopPropagation()}
                                             >
                                                 GitHub Profile ↗
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                            </S.FollowingGithubLink>
+                                        </S.FollowingInfo>
+                                    </S.FollowingCardContent>
+                                </S.FollowingCard>
                             ))}
-                        </div>
+                        </S.FollowingGrid>
 
                         {totalPages > 1 && (
-                            <div className="pagination-container">
-                                <button
-                                    className="pagination-btn"
+                            <S.PaginationContainer>
+                                <S.PaginationBtn
                                     disabled={currentPage === 1}
                                     onClick={() => setCurrentPage((prev) => prev - 1)}
                                 >
                                     PREV
-                                </button>
-                                <span className="pagination-info">
+                                </S.PaginationBtn>
+                                <S.PaginationInfo>
                                     PAGE {String(currentPage).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
-                                </span>
-                                <button
-                                    className="pagination-btn"
+                                </S.PaginationInfo>
+                                <S.PaginationBtn
                                     disabled={currentPage === totalPages}
                                     onClick={() => setCurrentPage((prev) => prev + 1)}
                                 >
                                     NEXT
-                                </button>
-                            </div>
+                                </S.PaginationBtn>
+                            </S.PaginationContainer>
                         )}
                     </>
                 ) : (
                     <div className="status-text">Not following any users.</div>
                 )}
-            </div>
+            </S.FollowingListContainer>
         </section>
     );
 };

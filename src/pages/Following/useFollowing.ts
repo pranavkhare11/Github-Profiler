@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import api from "@api/client";
-import { GITHUB_ENDPOINTS } from "@constants/endpoints";
+import { userFollowing } from "@api/github";
 import { useAbortController } from "@hooks";
 import type { GitHubFollowerUser } from "@app-types/github";
 
@@ -17,11 +16,8 @@ export const useFollowing = () => {
             const signal = getSignal();
             try {
                 setIsFetching(true);
-                const response = await api.get(GITHUB_ENDPOINTS.userFollowing(username), {
-                    params: { per_page: 100 },
-                    signal,
-                });
-                setFollowing(response.data);
+                const data = await userFollowing(username, signal);
+                setFollowing(data);
             } catch (error: unknown) {
                 if (error instanceof Error && error.name !== "CanceledError") {
                     console.error("Error fetching following list:", error);
