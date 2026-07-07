@@ -1,11 +1,11 @@
 import api from "./client";
 import { GITHUB_ENDPOINTS } from "../constants/endpoints";
-import type { 
-    GitHubUserSuggestion, 
-    GitHubUserProfile, 
-    GitHubRepo, 
-    GitHubGist, 
-    GitHubFollowerUser 
+import type {
+    GitHubUserSuggestion,
+    GitHubUserProfile,
+    GitHubRepo,
+    GitHubGist,
+    GitHubFollowerUser
 } from "../types/github";
 
 export const searchUsers = async (

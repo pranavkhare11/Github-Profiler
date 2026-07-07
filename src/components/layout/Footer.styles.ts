@@ -24,11 +24,13 @@ export const FooterContent = styled.div`
 export const FooterBrand = styled.span`
   font-family: var(--font-dot);
   letter-spacing: 0.13em;
-  color: #1d1d1d;
+  color: var(--text-main);
   text-transform: uppercase;
+  transition: color 0.3s ease;
 `;
 
 export const FooterSigns = styled.span`
-  color: #787878;
+  color: var(--text-soft);
   font-size: 0.82rem;
+  transition: color 0.3s ease;
 `;

@@ -17,26 +17,29 @@ export const SearchBadge = styled.div`
   align-self: flex-start;
   padding: 4px 10px;
   border-radius: 999px;
-  background-color: #f8d8d2;
-  color: #9a2e28;
+  background-color: var(--red-soft);
+  color: var(--red);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  transition: background-color 0.3s ease, color 0.3s ease;
 `;
 
 export const SearchTitle = styled.h2`
   font-size: 32px;
   line-height: 1.05;
   margin: 0;
-  color: #141312;
+  color: var(--text-main);
+  transition: color 0.3s ease;
 `;
 
 export const SearchSubtitle = styled.p`
   max-width: 720px;
   font-size: 16px;
-  color: #4b4a49;
+  color: var(--text-soft);
   margin: 0;
+  transition: color 0.3s ease;
 `;
 
 export const RecentSearchesContainer = styled.div`

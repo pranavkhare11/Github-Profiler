@@ -1,5 +1,6 @@
 import { useLocation, Link } from "react-router";
 import SearchBar from "@pages/Search/components/SearchBar/SearchBar";
+import ThemeToggle from "./ThemeToggle";
 import * as S from "./Navbar.styles";
 
 const Navbar = () => {
@@ -48,6 +49,7 @@ const Navbar = () => {
               </S.DecorHardwareGroup>
             </S.NavbarDecor>
           )}
+          <ThemeToggle />
         </S.NavbarRight>
       </S.NavbarContent>
     </S.NavbarContainer>

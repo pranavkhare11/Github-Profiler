@@ -10,15 +10,16 @@ export const MetaChip = styled.div`
   align-items: center;
   gap: 6px;
   padding: 4px 9px;
-  border: 1px solid #f3b3bb;
+  border: 1px solid var(--chip-border, #f3b3bb);
   background: var(--red-soft);
-  color: #981321;
+  color: var(--chip-text, #981321);
   border-radius: 999px;
   font-family: var(--font-dot);
   font-size: 0.78rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   margin-bottom: 10px;
+  transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
 
   &::before {
     content: "";
@@ -82,12 +83,13 @@ export const ProfileLensWrapper = styled.div`
   height: 110px;
   border-radius: 50%;
   padding: 4px;
-  background: radial-gradient(circle at 35% 35%, #fbfbfb, #e5e5e5 75%);
+  background: radial-gradient(circle at 35% 35%, var(--white-1), var(--white-4) 75%);
   border: 2px solid var(--line-2);
   box-shadow: 0 4px 10px rgba(0,0,0,0.06), inset 0 2px 4px rgba(0,0,0,0.04);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.3s ease, border-color 0.3s ease;
 `;
 
 export const ProfileAvatarImg = styled.img`
@@ -116,9 +118,10 @@ export const ProfileRedIndicator = styled.span`
   width: 10px;
   height: 10px;
   background: var(--red);
-  border: 2px solid #ffffff;
+  border: 2px solid var(--white-1);
   border-radius: 50%;
   box-shadow: 0 0 4px rgba(209, 31, 47, 0.4);
+  transition: border-color 0.3s ease;
 `;
 
 export const ProfileInfoZone = styled.div`
@@ -150,13 +153,14 @@ export const ProfileUsernameTag = styled.span`
 export const ProfileLocationTag = styled.span`
   font-family: var(--font-dot);
   font-size: 0.7rem;
-  color: #707070;
+  color: var(--text-soft);
   border: 1px solid var(--line-2);
   border-radius: 4px;
   padding: 2px 6px;
   background: var(--white-3);
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
 `;
 
 export const ProfileName = styled.h1`
@@ -165,7 +169,8 @@ export const ProfileName = styled.h1`
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.15;
-  color: #111111;
+  color: var(--text-main);
+  transition: color 0.3s ease;
 `;
 
 export const ProfileBio = styled.p`

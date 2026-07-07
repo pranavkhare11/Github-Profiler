@@ -23,7 +23,7 @@ export const SearchBarControl = styled.input`
   }
 
   &:focus-visible {
-    outline: 2px solid #242424;
+    outline: 2px solid var(--text-main);
     outline-offset: 2px;
   }
 `;
@@ -43,7 +43,7 @@ export const SearchBarButton = styled.button`
   cursor: pointer;
 
   &:focus-visible {
-    outline: 2px solid #242424;
+    outline: 2px solid var(--text-main);
     outline-offset: 2px;
   }
 `;
@@ -56,8 +56,8 @@ export const SearchBarResults = styled.div`
   z-index: 100;
   margin-top: 6px;
   background: 
-    radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-    rgba(255, 255, 255, 0.98);
+    radial-gradient(var(--dropdown-dot) 1px, transparent 1px),
+    var(--dropdown-bg);
   background-size: 8px 8px, 100% 100%;
   backdrop-filter: blur(12px);
   border: 1px solid var(--line);
@@ -112,7 +112,7 @@ export const SearchBarItem = styled.button`
   padding: 11px 12px;
   color: var(--text-main);
   text-align: left;
-  border-bottom: 1px solid #ececec;
+  border-bottom: 1px solid var(--line);
   cursor: pointer;
 
   &:last-child {
@@ -120,11 +120,11 @@ export const SearchBarItem = styled.button`
   }
 
   &:hover {
-    background: #f5f5f5;
+    background: var(--white-4);
   }
 
   &:focus-visible {
-    outline: 2px solid #242424;
+    outline: 2px solid var(--text-main);
     outline-offset: 2px;
   }
 `;

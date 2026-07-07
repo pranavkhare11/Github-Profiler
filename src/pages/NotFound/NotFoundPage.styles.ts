@@ -10,13 +10,15 @@ export const NotFoundContainer = styled.section`
 export const NotFoundTitle = styled.h2`
   font-size: 28px;
   margin: 0;
-  color: #141312;
+  color: var(--text-main);
+  transition: color 0.3s ease;
 `;
 
 export const NotFoundText = styled.p`
   margin: 0;
-  color: #4b4a49;
+  color: var(--text-soft);
   font-size: 15px;
+  transition: color 0.3s ease;
 `;
 
 export const SearchBarWrapper = styled.div`

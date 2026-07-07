@@ -14,6 +14,13 @@
   --red-soft: #ffe7ea;
   --shadow-soft: rgba(0, 0, 0, 0.08) 0 20px 45px -28px;
 
+  --black-main: #1a1a1a;
+  --accent-red: #d11f2f;
+  --dropdown-bg: rgba(255, 255, 255, 0.98);
+  --dropdown-dot: rgba(0, 0, 0, 0.03);
+  --chip-border: #f3b3bb;
+  --chip-text: #981321;
+
   --font-ui: "Manrope", "Segoe UI", sans-serif;
   --font-dot: "DotGothic16", "Courier New", monospace;
   --shell-max: 1440px;
@@ -24,6 +31,28 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html[data-theme="dark"] {
+  --white-1: #111111;
+  --white-2: #161616;
+  --white-3: #1a1a1a;
+  --white-4: #222222;
+  --line: #2c2c2c;
+  --line-2: #383838;
+  --text-main: #f5f5f5;
+  --text-soft: #a0a0a0;
+  --text-faint: #666666;
+  --red: #ff3344;
+  --red-soft: #2c1416;
+  --shadow-soft: rgba(0, 0, 0, 0.5) 0 20px 45px -28px;
+
+  --black-main: #ffffff;
+  --accent-red: #ff3344;
+  --dropdown-bg: rgba(22, 22, 22, 0.98);
+  --dropdown-dot: rgba(255, 255, 255, 0.03);
+  --chip-border: #4a2024;
+  --chip-text: #ff4a5a;
 }
 
 * {
@@ -37,6 +66,14 @@ body {
     radial-gradient(circle at 12% 9%, rgba(255, 255, 255, 0.9), transparent 34%),
     radial-gradient(circle at 90% 82%, rgba(255, 255, 255, 0.64), transparent 42%),
     linear-gradient(155deg, #f4f4f4 0%, #ececec 40%, #f9f9f9 100%);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 12% 9%, rgba(30, 30, 30, 0.4), transparent 34%),
+    radial-gradient(circle at 90% 82%, rgba(20, 20, 20, 0.5), transparent 42%),
+    linear-gradient(155deg, #0a0a0a 0%, #121212 50%, #0d0d0d 100%);
 }
 
 #root {
@@ -63,18 +100,10 @@ body {
   border: 1px solid var(--line);
   border-radius: 26px;
   box-shadow: var(--shadow-soft);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background:
-    linear-gradient(to right, transparent 24%, rgba(0, 0, 0, 0.025) 24%, rgba(0, 0, 0, 0.025) 25%, transparent 25%),
-    linear-gradient(to bottom, transparent 64%, rgba(0, 0, 0, 0.022) 64%, rgba(0, 0, 0, 0.022) 65%, transparent 65%);
-  pointer-events: none;
-}
+
 
 /* Common Layout Helpers */
 .content-panel {
@@ -89,7 +118,8 @@ body {
   font-size: clamp(2rem, 5vw, 3.1rem);
   line-height: 0.98;
   font-weight: 800;
-  color: #151515;
+  color: var(--text-main);
+  transition: color 0.3s ease;
 }
 
 .page-subtitle {
