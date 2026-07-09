@@ -35,9 +35,9 @@ const ProfileTabs = ({ login, publicRepos, publicGists }: ProfileTabsProps) => {
 
             <S.TabViewContent>
                 {activeTab === "repos" ? (
-                    <RepoList login={login} />
+                    <RepoList login={login} totalCount={publicRepos} />
                 ) : (
-                    <GistList login={login} />
+                    <GistList login={login} totalCount={publicGists} />
                 )}
             </S.TabViewContent>
         </>

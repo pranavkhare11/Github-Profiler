@@ -1,14 +1,29 @@
+import { useSearchParams } from "react-router";
 import { useGistList } from "./useGistList";
 import { usePagination } from "@hooks";
 import * as S from "./GistList.styles";
 
 interface GistListProps {
     login: string;
+    totalCount: number;
 }
 
-const GistList = ({ login }: GistListProps) => {
-    const { gists, isFetching } = useGistList(login);
-    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedGists } = usePagination(gists, 10, login, `/profile/${login}/gists`);
+const GistList = ({ login, totalCount }: GistListProps) => {
+    const [searchParams] = useSearchParams();
+    const pageParam = searchParams.get("page");
+    const currentPageFromUrl = pageParam ? parseInt(pageParam, 10) || 1 : 1;
+
+    const totalPagesCount = Math.ceil(totalCount / 10);
+    const validPage = totalPagesCount > 0 ? Math.min(Math.max(currentPageFromUrl, 1), totalPagesCount) : 1;
+
+    const { gists, isFetching } = useGistList(login, validPage);
+    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedGists } = usePagination(
+        gists,
+        10,
+        totalCount,
+        login,
+        `/profile/${login}/gists`
+    );
 
     if (isFetching) {
         return (

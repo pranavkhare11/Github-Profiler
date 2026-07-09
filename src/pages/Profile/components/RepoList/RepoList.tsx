@@ -1,14 +1,29 @@
+import { useSearchParams } from "react-router";
 import { useRepoList } from "./useRepoList";
 import { usePagination } from "@hooks";
 import * as S from "./RepoList.styles";
 
 interface RepoListProps {
     login: string;
+    totalCount: number;
 }
 
-const RepoList = ({ login }: RepoListProps) => {
-    const { repos, isFetching } = useRepoList(login);
-    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedRepos } = usePagination(repos, 10, login, `/profile/${login}/repos`);
+const RepoList = ({ login, totalCount }: RepoListProps) => {
+    const [searchParams] = useSearchParams();
+    const pageParam = searchParams.get("page");
+    const currentPageFromUrl = pageParam ? parseInt(pageParam, 10) || 1 : 1;
+
+    const totalPagesCount = Math.ceil(totalCount / 10);
+    const validPage = totalPagesCount > 0 ? Math.min(Math.max(currentPageFromUrl, 1), totalPagesCount) : 1;
+
+    const { repos, isFetching } = useRepoList(login, validPage);
+    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedRepos } = usePagination(
+        repos,
+        10,
+        totalCount,
+        login,
+        `/profile/${login}/repos`
+    );
 
     if (isFetching) {
         return (

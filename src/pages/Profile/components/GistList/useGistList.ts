@@ -3,7 +3,7 @@ import { userGists } from "@api/github";
 import { useAbortController } from "@hooks";
 import type { GitHubGist } from "@app-types/github";
 
-export const useGistList = (login: string) => {
+export const useGistList = (login: string, page: number) => {
     const [gists, setGists] = useState<GitHubGist[]>([]);
     const [isFetching, setIsFetching] = useState(false);
     const { getSignal } = useAbortController();
@@ -13,7 +13,7 @@ export const useGistList = (login: string) => {
             const signal = getSignal();
             try {
                 setIsFetching(true);
-                const data = await userGists(login, signal);
+                const data = await userGists(login, page, 10, signal);
                 setGists(data);
             } catch (error: unknown) {
                 if (error instanceof Error && error.name !== "CanceledError") {
@@ -30,7 +30,7 @@ export const useGistList = (login: string) => {
         if (login) {
             fetchGists();
         }
-    }, [login, getSignal]);
+    }, [login, page, getSignal]);
 
     return {
         gists,

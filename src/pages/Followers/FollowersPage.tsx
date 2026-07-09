@@ -1,12 +1,25 @@
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation, useSearchParams } from "react-router";
 import { useFollowers } from "./useFollowers";
 import { usePagination } from "@hooks";
 import * as S from "./FollowersPage.styles";
 
 const FollowersPage = () => {
     const navigate = useNavigate();
-    const { username, followers, isFetching } = useFollowers();
-    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedFollowers } = usePagination(followers, 12, username);
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+
+    const pageParam = searchParams.get("page");
+    const currentPageFromUrl = pageParam ? parseInt(pageParam, 10) || 1 : 1;
+
+    const initialTotalCount = location.state?.totalCount;
+    const { username, followers, totalCount, isFetching } = useFollowers(currentPageFromUrl, initialTotalCount);
+
+    const { currentPage, setCurrentPage, totalPages, displayedItems: displayedFollowers } = usePagination(
+        followers,
+        12,
+        totalCount,
+        username
+    );
 
     if (isFetching) {
         return (

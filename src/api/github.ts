@@ -40,10 +40,12 @@ export const userProfile = async (
 
 export const userFollowers = async (
     username: string,
+    page: number = 1,
+    perPage: number = 12,
     signal?: AbortSignal,
 ): Promise<GitHubFollowerUser[]> => {
     const response = await api.get(GITHUB_ENDPOINTS.userFollowers(username), {
-        params: { per_page: 100 },
+        params: { page, per_page: perPage },
         signal,
     });
 
@@ -56,10 +58,12 @@ export const userFollowers = async (
 
 export const userFollowing = async (
     username: string,
+    page: number = 1,
+    perPage: number = 12,
     signal?: AbortSignal,
 ): Promise<GitHubFollowerUser[]> => {
     const response = await api.get(GITHUB_ENDPOINTS.userFollowing(username), {
-        params: { per_page: 100 },
+        params: { page, per_page: perPage },
         signal,
     });
 
@@ -72,10 +76,12 @@ export const userFollowing = async (
 
 export const userRepos = async (
     username: string,
+    page: number = 1,
+    perPage: number = 10,
     signal?: AbortSignal,
 ): Promise<GitHubRepo[]> => {
     const response = await api.get(GITHUB_ENDPOINTS.userRepos(username), {
-        params: { per_page: 100 },
+        params: { page, per_page: perPage },
         signal,
     });
 
@@ -88,10 +94,12 @@ export const userRepos = async (
 
 export const userGists = async (
     username: string,
+    page: number = 1,
+    perPage: number = 10,
     signal?: AbortSignal,
 ): Promise<GitHubGist[]> => {
     const response = await api.get(GITHUB_ENDPOINTS.userGists(username), {
-        params: { per_page: 100 },
+        params: { page, per_page: perPage },
         signal,
     });
 

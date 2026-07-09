@@ -52,10 +52,10 @@ const ProfileCard = ({ login, onProfileLoaded, onFetching }: ProfileCardProps) =
                             <S.ProfileName>{userprofile.name || userprofile.login}</S.ProfileName>
                             {userprofile.bio && <S.ProfileBio>{userprofile.bio}</S.ProfileBio>}
 
-                            <S.ProfileTextDetail $clickable onClick={() => navigate(`/profile/${userprofile.login}/followers`)}>
+                            <S.ProfileTextDetail $clickable onClick={() => navigate(`/profile/${userprofile.login}/followers`, { state: { totalCount: userprofile.followers } })}>
                                 Followers: {userprofile.followers}
                             </S.ProfileTextDetail>
-                            <S.ProfileTextDetail $clickable onClick={() => navigate(`/profile/${userprofile.login}/following`)}>
+                            <S.ProfileTextDetail $clickable onClick={() => navigate(`/profile/${userprofile.login}/following`, { state: { totalCount: userprofile.following } })}>
                                 Following: {userprofile.following}
                             </S.ProfileTextDetail>
                             {userprofile.email && (

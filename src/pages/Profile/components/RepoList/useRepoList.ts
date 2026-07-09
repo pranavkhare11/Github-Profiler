@@ -3,7 +3,7 @@ import { userRepos } from "@api/github";
 import { useAbortController } from "@hooks";
 import type { GitHubRepo } from "@app-types/github";
 
-export const useRepoList = (login: string) => {
+export const useRepoList = (login: string, page: number) => {
     const [repos, setRepos] = useState<GitHubRepo[]>([]);
     const [isFetching, setIsFetching] = useState(false);
     const { getSignal } = useAbortController();
@@ -13,7 +13,7 @@ export const useRepoList = (login: string) => {
             const signal = getSignal();
             try {
                 setIsFetching(true);
-                const data = await userRepos(login, signal);
+                const data = await userRepos(login, page, 10, signal);
                 setRepos(data);
             } catch (error: unknown) {
                 if (error instanceof Error && error.name !== "CanceledError") {
@@ -30,7 +30,7 @@ export const useRepoList = (login: string) => {
         if (login) {
             fetchRepos();
         }
-    }, [login, getSignal]);
+    }, [login, page, getSignal]);
 
     return {
         repos,
